@@ -3,6 +3,8 @@ from discord.ext import commands
 import config
 import json
 import introduction_message
+import datetime
+
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -18,7 +20,7 @@ async def entry(interaction : discord.Interaction, para : int, quarter : int):
     """Enter your progress reading the Quran."""
 
     if interaction.channel_id != 1218213695939805194:
-        await interaction.response.send_message("Kindly use the entry channel to make an entry.")
+        await interaction.response.send_message("Kindly use the entry channel to make an entry.", ephemeral=True)
         return
 
     member = interaction.user
@@ -43,7 +45,7 @@ async def leaderboard(interaction : discord.Interaction):
     """Show the leaderboard of the Quran Quest."""
 
     if interaction.channel_id != 1218214154695868496:
-        await interaction.response.send_message("Kindly use the leaderboard channel to check the leaderboard.")
+        await interaction.response.send_message("Kindly use the leaderboard channel to check the leaderboard.", ephemeral=True)
         return
 
     #deletes the previous message
@@ -61,6 +63,18 @@ async def leaderboard(interaction : discord.Interaction):
         member = await bot.fetch_user(int(i[0]))
         embed.add_field(name= f"{rank}. {member.name}" , value=f'Para: {i[1][0]}, Quarter: {i[1][1]}', inline=False)
         rank += 1
+    
+    # Get the current UTC time
+    current_utc_time = datetime.datetime.now(datetime.timezone.utc)
+    
+    # Add the UTC offset for GMT+6 (6 hours ahead)
+    current_gmt6_time = current_utc_time + datetime.timedelta(hours=6)
+    
+    # Format the current time and add it to the footer of the embed
+    current_time_str = current_gmt6_time.strftime('%I:%M %p %d-%m-%Y GMT+6')
+    embed.set_footer(text=f"Last updated: {current_time_str}")
+    
+
     await interaction.response.send_message(embed=embed)
 
 @bot.command()
