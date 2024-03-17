@@ -1,1 +1,1 @@
-discord_token = "Enter Discord Bot Token"
+discord_token = "BOT TOKEN HERE"

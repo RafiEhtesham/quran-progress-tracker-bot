@@ -32,7 +32,9 @@ async def entry(interaction : discord.Interaction, para : int, quarter : int):
         file.seek(0)
         json.dump(dic, file, indent= 4)
 
-    if quarter != 0:
+    if quarter == 2:
+        response = f'{member.name} has read {para} para and is half way through it.'
+    elif quarter != 0:
         response = f'{member.name} has read {para} para and is {quarter} quarter through it.'
     else:
         response = f'{member.name} has read {para} para.'
